@@ -58,7 +58,7 @@ router.post('/start', function(req, res, next) {
 
 });
 
-router.post('/change/playlist', async function (req, res, next) {
+router.post('/change/playlist', async function (req, res) {
 
     try {
         var mount            = req.body.mount;
