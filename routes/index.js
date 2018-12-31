@@ -62,22 +62,19 @@ router.post('/change/playlist', async function (req, res, next) {
     var mount            = req.body.mount;
     var playlist      = req.body.playlist;
     var telnet_port      = req.body.telnet_port;
+    var connection = new Telnet();
+    var params = {
+        host: '127.0.0.1',
+        port: telnet_port,
+        shellPrompt: '/ # ',
+        timeout: 1500
+    };
+    await connection.connect(params);
+    await connection.exec('default(dot)pls.uri '+playlist);
+    await connection.exec(mount+'.skip');
     res.json({
-        mount,
-        playlist,
-        telnet_port
+        "ok":"ok"
     });
-    // var connection = new Telnet();
-    // var params = {
-    //     host: '127.0.0.1',
-    //     port: telnet_port,
-    //     shellPrompt: '/ # ',
-    //     timeout: 1500
-    // };
-    // await connection.connect(params);
-    // await connection.exec('default(dot)pls.uri '+playlist);
-    // await connection.exec(mount+'.skip');
-    // res.end();
 });
 
 
