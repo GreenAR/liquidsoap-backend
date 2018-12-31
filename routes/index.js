@@ -67,21 +67,13 @@ router.post('/change/playlist', async function (req, res, next) {
 
 
         var connection = new Telnet();
-
-
         var params = {
             host: '127.0.0.1',
             port: telnet_port,
-            shellPrompt: '/ # ',
+            shellPrompt: '',
             timeout: 1500
         };
-        try {
         await connection.connect(params);
-        }catch (e) {
-            res.json({
-                "status":"error"
-            });
-        }
         connection.on('error', function(err) {
             throw(err)
         });
