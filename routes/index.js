@@ -83,6 +83,7 @@ router.post('/change/playlist', async function (req, res) {
                     });
                 })
             }, function(error) {
+                throw(error)
                 res.json({
                     "status":"error"
                 });
