@@ -59,6 +59,9 @@ router.post('/start', function(req, res, next) {
 });
 
 router.post('/change/playlist', async function (req, res, next) {
+    Promise.onPossiblyUnhandledRejection(function(error) {
+        throw error
+    });
 
     try {
         var mount            = req.body.mount;
