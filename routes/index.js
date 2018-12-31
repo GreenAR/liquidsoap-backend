@@ -71,14 +71,28 @@ router.post('/change/playlist', async function (req, res) {
             shellPrompt: '/ # ',
             timeout: 1500
         };
-        await connection.connect(params);
-        await connection.exec('default(dot)pls.uri '+playlist);
-        await connection.exec(mount+'.skip');
-        res.json({
-            "status":"success"
-        });
+
+
+        connection.connect(params)
+            .then(function(prompt) {
+                connection.exec('default(dot)pls.uri '+playlist).then(function(res) {
+                    connection.exec(mount+'.skip').then(function(res) {
+                        res.json({
+                            "status":"success"
+                        });
+                    });
+                })
+            }, function(error) {
+                res.json({
+                    "status":"error"
+                });
+            });
+
+
     }catch (e) {
         res.json({
+            "status":"error"
+        }); res.json({
             "status":"error"
         });
     }
