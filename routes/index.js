@@ -58,7 +58,7 @@ router.post('/start', function(req, res, next) {
 
 });
 
-router.post('/change/playlist', async function (req, res) {
+router.post('/change/playlist', async function (req, res, next) {
 
     try {
         var mount            = req.body.mount;
@@ -71,29 +71,17 @@ router.post('/change/playlist', async function (req, res) {
             shellPrompt: '/ # ',
             timeout: 1500
         };
-
-
-        connection.connect(params)
-            .then(function(prompt) {
-                connection.exec('default(dot)pls.uri '+playlist).then(function(res) {
-                    connection.exec(mount+'.skip').then(function(res) {
-                        res.json({
-                            "status":"success"
-                        });
-                    });
-                })
-            }, function(error) {
-                throw(error)
-                res.json({
-                    "status":"error"
-                });
-            });
-
-
+        await connection.connect(params);
+        connection.on('error', function(err) {
+            throw(err)
+        });
+        await connection.exec('default(dot)pls.uri '+playlist);
+        await connection.exec(mount+'.skip');
+        res.json({
+            "status":"success"
+        });
     }catch (e) {
         res.json({
-            "status":"error"
-        }); res.json({
             "status":"error"
         });
     }
