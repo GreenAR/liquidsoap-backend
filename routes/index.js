@@ -67,8 +67,8 @@ router.post('/change/playlist', async function (req, res, next) {
         shell.exec('pwd',function(code1, stdout1, stderr1) {
             console.log(code1,stdout1,stderr1);
         });
-        shell.exec('python ./../routes/telnet.py '+cmd1,function(code1, stdout1, stderr1) {
-            shell.exec('python ./../routes/telnet.py '+cmd2,function(code, stdout, stderr) {
+        shell.exec('python ./routes/telnet.py '+cmd1,function(code1, stdout1, stderr1) {
+            shell.exec('python ./routes/telnet.py '+cmd2,function(code, stdout, stderr) {
                 res.json({
                     'Exit code':code,
                     'Program stdout':stdout,
