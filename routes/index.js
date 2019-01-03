@@ -64,15 +64,12 @@ router.post('/change/playlist', async function (req, res, next) {
         var telnet_port      = req.body.telnet_port;
         let cmd1 = telnet_port+' "default(dot)pls.uri '+playlist+'"';
         let cmd2 = telnet_port+' '+mount+'.skip';
-        shell.exec('pwd',function(code1, stdout1, stderr1) {
-            console.log(code1,stdout1,stderr1);
-        });
         shell.exec('python ./routes/telnet.py '+cmd1,function(code1, stdout1, stderr1) {
+            console.log(cmd1,"cmd1 done");
             shell.exec('python ./routes/telnet.py '+cmd2,function(code, stdout, stderr) {
+                console.log(cmd2,"cmd1 done");
                 res.json({
-                    'Exit code':code,
-                    'Program stdout':stdout,
-                    'Program stderr':stderr
+                    "status":"success"
                 });
             });
         });
