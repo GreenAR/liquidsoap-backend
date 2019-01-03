@@ -3,10 +3,9 @@ import sys
 import telnetlib
 HOST = "localhost"
 port = sys.argv[1]
-mount = sys.argv[2]
-playlist = sys.argv[3]
+cmd = sys.argv[2]
 tn = telnetlib.Telnet(HOST,port)
 
-tn.write("default(dot)pls.uri "+playlist+" \n")
-tn.write(mount+".skip \n")
+tn.write(cmd+" \n")
+print tn.read_some()
 tn.close()

@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var fs = require('fs');
 var shell = require('shelljs');
-var Telnet = require('telnet-client')
 
 
 /* GET home page. */
@@ -63,23 +62,16 @@ router.post('/change/playlist', async function (req, res, next) {
         var mount            = req.body.mount;
         var playlist      = req.body.playlist;
         var telnet_port      = req.body.telnet_port;
-
-
-        var connection = new Telnet();
-        var params = {
-            host: '127.0.0.1',
-            port: telnet_port,
-            shellPrompt: '',
-            timeout: 1500
-        };
-        await connection.connect(params);
-        connection.on('error', function(err) {
-            throw(err)
-        });
-        await connection.exec('default(dot)pls.uri '+playlist);
-        await connection.exec(mount+'.skip');
-        res.json({
-            "status":"success"
+        let cmd1 = telnet_port+' "default(dot)pls.uri '+playlist+'"';
+        let cmd2 = telnet_port+' '+mount+'.skip';
+        shell.exec('python telnet.py '+cmd1,function(code1, stdout1, stderr1) {
+            shell.exec('python telnet.py '+cmd2,function(code, stdout, stderr) {
+                res.json({
+                    'Exit code':code,
+                    'Program stdout':stdout,
+                    'Program stderr':stderr
+                });
+            });
         });
     }catch (e) {
         res.json({
