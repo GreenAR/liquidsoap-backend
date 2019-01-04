@@ -58,6 +58,8 @@ router.post('/start', function(req, res, next) {
 
 });
 router.post('/change/playlist/at', async function (req, res, next) {
+    console.log('/change/playlist/at', new Date().toLocaleString());
+
     try {
     let mount        = req.body.mount;
     let record       = req.body.record;
@@ -66,20 +68,20 @@ router.post('/change/playlist/at', async function (req, res, next) {
     let telnet_port  = req.body.telnet_port;
     let date_param   = req.body.date;
     let date = new Date(date_param);
+
+
     let date2 = new Date(date_param);
+    date2.setSeconds(date2.getSeconds() + time.seconds);
+    date2.setMinutes(date2.getMinutes() + time.minutes);
+    date2.setHours(date2.getHours() + time.hours);
 
 
-        date2.setSeconds(date2.getSeconds() + time.seconds);
-        date2.setMinutes(date2.getMinutes() + time.minutes);
-        date2.setHours(date2.getHours() + time.hours);
-
-    console.log(new Date().toLocaleString());
     let j = schedule.scheduleJob(date, function(){
         let cmd1 = telnet_port+' "default(dot)pls.uri '+record+'"';
         let cmd2 = telnet_port+' '+mount+'.skip';
         shell.exec('python ./routes/telnet.py '+cmd1,function(code1, stdout1, stderr1) {
-            console.log(date.toLocaleString());
             shell.exec('python ./routes/telnet.py '+cmd2,function(code, stdout, stderr) {
+                console.log('lanced record',date.toLocaleString());
             });
         });
     });
@@ -89,11 +91,12 @@ router.post('/change/playlist/at', async function (req, res, next) {
         });
 
         schedule.scheduleJob(date2, function(){
-            console.log(date2.toLocaleString());
+
             let cmd1 = telnet_port+' "default(dot)pls.uri '+playlist+'"';
             let cmd2 = telnet_port+' '+mount+'.skip';
             shell.exec('python ./routes/telnet.py '+cmd1,function(code1, stdout1, stderr1) {
                 shell.exec('python ./routes/telnet.py '+cmd2,function(code, stdout, stderr) {
+                    console.log('back to playlist',date2.toLocaleString());
                 });
             });
         });
