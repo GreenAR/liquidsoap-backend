@@ -79,24 +79,28 @@ router.post('/change/playlist/at', async function (req, res, next) {
             "status":"success",
             "job_name":j.name
         });
+
+
+        date.setSeconds(date.getSeconds() + time.seconds);
+        date.setMinutes(date.getMinutes() + time.minutes);
+        date.setHours(date.getHours() + time.hours);
+
+        schedule.scheduleJob(date, function(){
+            let cmd1 = telnet_port+' "default(dot)pls.uri '+playlist+'"';
+            let cmd2 = telnet_port+' '+mount+'.skip';
+            shell.exec('python ./routes/telnet.py '+cmd1,function(code1, stdout1, stderr1) {
+                shell.exec('python ./routes/telnet.py '+cmd2,function(code, stdout, stderr) {
+                });
+            });
+        });
+
     }catch (e) {
         res.json({
             "status":"error"
         });
     }
 
-    date.setSeconds(date.getSeconds() + time.seconds);
-    date.setMinutes(date.getMinutes() + time.minutes);
-    date.setHours(date.getHours() + time.hours);
 
-    schedule.scheduleJob(date, function(){
-        let cmd1 = telnet_port+' "default(dot)pls.uri '+playlist+'"';
-        let cmd2 = telnet_port+' '+mount+'.skip';
-        shell.exec('python ./routes/telnet.py '+cmd1,function(code1, stdout1, stderr1) {
-            shell.exec('python ./routes/telnet.py '+cmd2,function(code, stdout, stderr) {
-            });
-        });
-    });
 
 });
 
