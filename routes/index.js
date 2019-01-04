@@ -81,14 +81,19 @@ router.post('/change/playlist/at', async function (req, res, next) {
     let cmdskip = 'python ./routes/telnet.py '+telnet_port+' '+mount+'.skip';
 
     let j = schedule.scheduleJob(date, function(){
-        console.log('lanced record',date.toLocaleString());
-        shell.exec(cmdrecord,{silent:true});
-        shell.exec(cmdskip,{silent:true});
+
+        shell.exec(cmdrecord,{silent:true},function(code1, stdout1, stderr1) {
+            shell.exec(cmdskip,{silent:true},function(code, stdout, stderr) {
+                console.log('lanced record',date.toLocaleString());
+            });
+        });
     });
     let k = schedule.scheduleJob(date2, function(){
-        console.log('back to playlist',date2.toLocaleString());
-        shell.exec(cmdplaylist,{silent:true});
-        shell.exec(cmdskip,{silent:true});
+            shell.exec(cmdplaylist,{silent:true},function(code1, stdout1, stderr1) {
+                shell.exec(cmdskip,{silent:true},function(code, stdout, stderr) {
+                    console.log('back to playlist',date2.toLocaleString());
+                });
+            });
         });
 
     res.json({
@@ -132,14 +137,12 @@ router.post('/change/playlist', async function (req, res, next) {
         let telnet_port      = req.body.telnet_port;
         let cmd1 = telnet_port+' "default(dot)pls.uri '+playlist+'"';
         let cmd2 = telnet_port+' '+mount+'.skip';
-        shell.exec('python ./routes/telnet.py '+cmd1,{silent:true},function () {
-            console.log("playlist changed")
-        });
-        shell.exec('python ./routes/telnet.py '+cmd2,{silent:true},function () {
-            console.log("skiped")
-        });
-        res.json({
-            "status":"success"
+        shell.exec('python ./routes/telnet.py '+cmd1,{silent:true},function(code1, stdout1, stderr1) {
+            shell.exec('python ./routes/telnet.py '+cmd2,{silent:true},function(code, stdout, stderr) {
+                res.json({
+                    "status":"success"
+                });
+            });
         });
     }catch (e) {
         res.json({
