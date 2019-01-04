@@ -81,19 +81,14 @@ router.post('/change/playlist/at', async function (req, res, next) {
     let cmdskip = 'python ./routes/telnet.py '+telnet_port+' '+mount+'.skip';
 
     let j = schedule.scheduleJob(date, function(){
-
-        shell.exec(cmdrecord,function(code1, stdout1, stderr1) {
-            shell.exec(cmdskip,function(code, stdout, stderr) {
-                console.log('lanced record',date.toLocaleString());
-            });
-        });
+        console.log('lanced record',date.toLocaleString());
+        shell.exec(cmdrecord,{silent:true});
+        shell.exec(cmdskip,{silent:true});
     });
     let k = schedule.scheduleJob(date2, function(){
-            shell.exec(cmdplaylist,function(code1, stdout1, stderr1) {
-                shell.exec(cmdskip,function(code, stdout, stderr) {
-                    console.log('back to playlist',date2.toLocaleString());
-                });
-            });
+        console.log('back to playlist',date2.toLocaleString());
+        shell.exec(cmdplaylist,{silent:true});
+        shell.exec(cmdskip,{silent:true});
         });
 
     res.json({
@@ -137,12 +132,10 @@ router.post('/change/playlist', async function (req, res, next) {
         let telnet_port      = req.body.telnet_port;
         let cmd1 = telnet_port+' "default(dot)pls.uri '+playlist+'"';
         let cmd2 = telnet_port+' '+mount+'.skip';
-        shell.exec('python ./routes/telnet.py '+cmd1,function(code1, stdout1, stderr1) {
-            shell.exec('python ./routes/telnet.py '+cmd2,function(code, stdout, stderr) {
-                res.json({
-                    "status":"success"
-                });
-            });
+        shell.exec('python ./routes/telnet.py '+cmd1,{silent:true});
+        shell.exec('python ./routes/telnet.py '+cmd2,{silent:true});
+        res.json({
+            "status":"success"
         });
     }catch (e) {
         res.json({
