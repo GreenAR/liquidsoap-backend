@@ -83,16 +83,22 @@ router.post('/change/playlist/at', async function (req, res, next) {
     let j = schedule.scheduleJob(date, function(){
 
         shell.exec(cmdrecord,{silent:true},function(code1, stdout1, stderr1) {
-            shell.exec(cmdskip,{silent:true},function(code, stdout, stderr) {
-                console.log('lanced record',date.toLocaleString());
-            });
+            setTimeout(function(){
+                shell.exec(cmdskip,{silent:true},function(code, stdout, stderr) {
+                    console.log('lanced record',date.toLocaleString());
+                });
+            }, 500);
+
         });
     });
     let k = schedule.scheduleJob(date2, function(){
             shell.exec(cmdplaylist,{silent:true},function(code1, stdout1, stderr1) {
-                shell.exec(cmdskip,{silent:true},function(code, stdout, stderr) {
-                    console.log('back to playlist',date2.toLocaleString());
-                });
+                setTimeout(function(){
+                    shell.exec(cmdskip,{silent:true},function(code, stdout, stderr) {
+                        console.log('back to playlist',date2.toLocaleString());
+                    });
+                }, 500);
+
             });
         });
 
@@ -138,11 +144,14 @@ router.post('/change/playlist', async function (req, res, next) {
         let cmd1 = telnet_port+' "default(dot)pls.uri '+playlist+'"';
         let cmd2 = telnet_port+' '+mount+'.skip';
         shell.exec('python ./routes/telnet.py '+cmd1,{silent:true},function(code1, stdout1, stderr1) {
-            shell.exec('python ./routes/telnet.py '+cmd2,{silent:true},function(code, stdout, stderr) {
-                res.json({
-                    "status":"success"
+            setTimeout(function(){
+                shell.exec('python ./routes/telnet.py '+cmd2,{silent:true},function(code, stdout, stderr) {
+                    res.json({
+                        "status":"success"
+                    });
                 });
-            });
+            }, 500);
+
         });
     }catch (e) {
         res.json({
