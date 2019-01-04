@@ -132,8 +132,12 @@ router.post('/change/playlist', async function (req, res, next) {
         let telnet_port      = req.body.telnet_port;
         let cmd1 = telnet_port+' "default(dot)pls.uri '+playlist+'"';
         let cmd2 = telnet_port+' '+mount+'.skip';
-        shell.exec('python ./routes/telnet.py '+cmd1,{silent:true});
-        shell.exec('python ./routes/telnet.py '+cmd2,{silent:true});
+        shell.exec('python ./routes/telnet.py '+cmd1,{silent:true},function () {
+            console.log("playlist changed")
+        });
+        shell.exec('python ./routes/telnet.py '+cmd2,{silent:true},function () {
+            console.log("skiped")
+        });
         res.json({
             "status":"success"
         });
