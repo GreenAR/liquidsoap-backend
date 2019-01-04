@@ -79,6 +79,7 @@ router.post('/change/playlist/at', async function (req, res, next) {
     let j = schedule.scheduleJob(date, function(){
         let cmd1 = telnet_port+' "default(dot)pls.uri '+record+'"';
         let cmd2 = telnet_port+' '+mount+'.skip';
+        console.log(cmd1);
         shell.exec('python ./routes/telnet.py '+cmd1,function(code1, stdout1, stderr1) {
             shell.exec('python ./routes/telnet.py '+cmd2,function(code, stdout, stderr) {
                 console.log('lanced record',date.toLocaleString());
@@ -94,6 +95,7 @@ router.post('/change/playlist/at', async function (req, res, next) {
 
             let cmd1 = telnet_port+' "default(dot)pls.uri '+playlist+'"';
             let cmd2 = telnet_port+' '+mount+'.skip';
+            console.log(cmd1);
             shell.exec('python ./routes/telnet.py '+cmd1,function(code1, stdout1, stderr1) {
                 shell.exec('python ./routes/telnet.py '+cmd2,function(code, stdout, stderr) {
                     console.log('back to playlist',date2.toLocaleString());
