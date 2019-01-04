@@ -61,6 +61,7 @@ router.post('/change/playlist/at', async function (req, res, next) {
     console.log('/change/playlist/at', new Date().toLocaleString());
 
     try {
+
     let mount        = req.body.mount;
     let record       = req.body.record;
     let time         = req.body.time;
@@ -75,33 +76,32 @@ router.post('/change/playlist/at', async function (req, res, next) {
     date2.setMinutes(date2.getMinutes() + time.minutes);
     date2.setHours(date2.getHours() + time.hours);
 
+    let cmdrecord = 'python ./routes/telnet.py '+telnet_port+' "default(dot)pls.uri '+record+'"';
+    let cmdplaylist = 'python ./routes/telnet.py '+telnet_port+' "default(dot)pls.uri '+playlist+'"';
+    let cmdskip = 'python ./routes/telnet.py '+telnet_port+' '+mount+'.skip';
 
     let j = schedule.scheduleJob(date, function(){
-        let cmd1 = telnet_port+' "default(dot)pls.uri '+record+'"';
-        let cmd2 = telnet_port+' '+mount+'.skip';
-        console.log("for 1",cmd1);
-        shell.exec('python ./routes/telnet.py '+cmd1,function(code1, stdout1, stderr1) {
-            shell.exec('python ./routes/telnet.py '+cmd2,function(code, stdout, stderr) {
+
+        shell.exec(cmdrecord,function(code1, stdout1, stderr1) {
+            shell.exec(cmdskip,function(code, stdout, stderr) {
                 console.log('lanced record',date.toLocaleString());
             });
         });
     });
-        res.json({
-            "status":"success",
-            "job_name":j.name
-        });
-
-        schedule.scheduleJob(date2, function(){
-
-            let cc1 = telnet_port+' "default(dot)pls.uri '+playlist+'"';
-            let cc2 = telnet_port+' '+mount+'.skip';
-            console.log("for 2",cc1);
-            shell.exec('python ./routes/telnet.py '+cc1,function(code1, stdout1, stderr1) {
-                shell.exec('python ./routes/telnet.py '+cc2,function(code, stdout, stderr) {
+    let k = schedule.scheduleJob(date2, function(){
+            shell.exec(cmdplaylist,function(code1, stdout1, stderr1) {
+                shell.exec(cmdskip,function(code, stdout, stderr) {
                     console.log('back to playlist',date2.toLocaleString());
                 });
             });
         });
+
+    res.json({
+            "status":"success",
+            "job_record_name":j.name,
+            "job_playlist_name":k.name
+        });
+
 
     }catch (e) {
         res.json({
