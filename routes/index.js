@@ -58,29 +58,57 @@ router.post('/start', function(req, res, next) {
 
 });
 router.post('/change/playlist/at', async function (req, res, next) {
-    console.log(new Date());
     try {
-    let mount            = req.body.mount;
-    let playlist      = req.body.playlist;
-    let telnet_port      = req.body.telnet_port;
-    let date_param      = req.body.date;
+    let mount        = req.body.mount;
+    let record       = req.body.record;
+    let time         = req.body.time;
+    let playlist     = req.body.playlist;
+    let telnet_port  = req.body.telnet_port;
+    let date_param   = req.body.date;
     let date = new Date(date_param);
 
     let j = schedule.scheduleJob(date, function(){
-        console.log(j);
+        let cmd1 = telnet_port+' "default(dot)pls.uri '+record+'"';
+        let cmd2 = telnet_port+' '+mount+'.skip';
+        shell.exec('python ./routes/telnet.py '+cmd1,function(code1, stdout1, stderr1) {
+            shell.exec('python ./routes/telnet.py '+cmd2,function(code, stdout, stderr) {
+            });
+        });
+    });
+        res.json({
+            "status":"success",
+            "job_name":j.name
+        });
+    }catch (e) {
+        res.json({
+            "status":"error"
+        });
+    }
+
+    date.setSeconds(date.getSeconds() + time.seconds);
+    date.setMinutes(date.getMinutes() + time.minutes);
+    date.setHours(date.getHours() + time.hours);
+
+    schedule.scheduleJob(date, function(){
         let cmd1 = telnet_port+' "default(dot)pls.uri '+playlist+'"';
         let cmd2 = telnet_port+' '+mount+'.skip';
         shell.exec('python ./routes/telnet.py '+cmd1,function(code1, stdout1, stderr1) {
-            console.log(cmd1,"cmd1 done");
             shell.exec('python ./routes/telnet.py '+cmd2,function(code, stdout, stderr) {
-                console.log(cmd2,"cmd1 done");
-                res.json({
-                    "status":"success"
-                });
             });
         });
     });
 
+});
+
+
+router.post('/cancel/playlist/at', async function (req, res, next) {
+    try {
+        let job_name      = req.body.job_name;
+        var job = schedule.scheduledJobs[job_name];
+        job.cancel();
+        res.json({
+            "status":"success"
+        });
     }catch (e) {
         res.json({
             "status":"error"
@@ -97,9 +125,7 @@ router.post('/change/playlist', async function (req, res, next) {
         let cmd1 = telnet_port+' "default(dot)pls.uri '+playlist+'"';
         let cmd2 = telnet_port+' '+mount+'.skip';
         shell.exec('python ./routes/telnet.py '+cmd1,function(code1, stdout1, stderr1) {
-            console.log(cmd1,"cmd1 done");
             shell.exec('python ./routes/telnet.py '+cmd2,function(code, stdout, stderr) {
-                console.log(cmd2,"cmd1 done");
                 res.json({
                     "status":"success"
                 });
