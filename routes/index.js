@@ -166,6 +166,13 @@ router.post('/change/playlist', async function (req, res, next) {
 
 router.post('/remove/user', async function (req, res, next) {
     try {
+
+        shell.exec('whoami ',{silent:true},function(code, stdout, stderr) {
+            console.log(stdout,stderr);
+        });
+        shell.exec('su liquser whoami ',{silent:true},function(code, stdout, stderr) {
+            console.log(stdout,stderr);
+        });
         shell.exec('whoami ',{silent:true},function(code, stdout, stderr) {
             console.log(stdout,stderr);
         });
