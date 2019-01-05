@@ -194,7 +194,7 @@ router.post('/reload/server', async function (req, res, next) {
     try {
 
         let username            = req.body.username;
-        let cmd =  'systemctl restart '+username;
+        let cmd =  'systemctl restart '+username+'-liquidsoap';
         shell.exec(cmd,{silent:true},function(code, stdout, stderr) {
             console.log(stdout,stderr);
         });
