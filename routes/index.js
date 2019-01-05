@@ -122,9 +122,12 @@ router.post('/change/playlist/at', async function (req, res, next) {
 
 router.post('/cancel/playlist/at', async function (req, res, next) {
     try {
-        let job_name      = req.body.job_name;
-        var job = schedule.scheduledJobs[job_name];
-        job.cancel();
+        let job_name1      = req.body.job_name1;
+        let job_name2      = req.body.job_name2;
+        let job1 = schedule.scheduledJobs[job_name1];
+        job1.cancel();
+        let job2 = schedule.scheduledJobs[job_name2];
+        job2.cancel();
         res.json({
             "status":"success"
         });
@@ -135,7 +138,6 @@ router.post('/cancel/playlist/at', async function (req, res, next) {
     }
 
 });
-
 router.post('/change/playlist', async function (req, res, next) {
     try {
         let mount            = req.body.mount;
@@ -161,5 +163,31 @@ router.post('/change/playlist', async function (req, res, next) {
 
 });
 
+
+router.post('/remove/user', async function (req, res, next) {
+    try {
+        shell.exec('whoami ',{silent:true},function(code, stdout, stderr) {
+            console.log(stdout,stderr);
+        });
+        let username            = req.body.username;
+        let domaine_name      = req.body.domaine_name;
+        if (domaine_name){
+            shell.exec('whoami',{silent:true},function(code, stdout, stderr) {
+                console.log(stdout,stderr);
+            });
+        }
+
+        res.json({
+            "status":"success"
+        });
+
+
+    }catch (e) {
+        res.json({
+            "status":"error"
+        });
+    }
+
+});
 
 module.exports = router;
