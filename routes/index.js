@@ -167,22 +167,15 @@ router.post('/change/playlist', async function (req, res, next) {
 router.post('/remove/user', async function (req, res, next) {
     try {
 
-        shell.exec('whoami ',{silent:true},function(code, stdout, stderr) {
-            console.log(stdout,stderr);
-        });
-        shell.exec('su liquser ; whoami ',{silent:true},function(code, stdout, stderr) {
-            console.log(stdout,stderr);
-        });
-        shell.exec('whoami ',{silent:true},function(code, stdout, stderr) {
-            console.log(stdout,stderr);
-        });
         let username            = req.body.username;
         let domaine_name      = req.body.domaine_name;
-        if (domaine_name){
-            shell.exec('whoami',{silent:true},function(code, stdout, stderr) {
-                console.log(stdout,stderr);
-            });
-        }
+        let cmd =  'systemctl stop '+username+'-liquidsoap && su liquser -c "cd ~/liquidsoap-daemon && mode=remove ./daemonize-liquidsoap.sh '+username+
+            '" && rm -rf /home/liquser/liquidsoap-daemon/script/'+username+'.liq /home/liquser/liquidsoap-daemon/script/'+
+            username+'-run.liq /home/liquser/liquidsoap-daemon/'+username+'-liquidsoap.systemd /home/liquser/liquidsoap-daemon/log/'
+            +username+'-run.log /home/liquser/liquidsoap-daemon/liquidsoap-backend/src/'+domaine_name;
+        shell.exec(cmd,{silent:true},function(code, stdout, stderr) {
+            console.log(stdout,stderr);
+        });
 
         res.json({
             "status":"success"
