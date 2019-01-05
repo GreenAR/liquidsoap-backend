@@ -190,4 +190,25 @@ router.post('/remove/user', async function (req, res, next) {
 
 });
 
+router.post('/reload/server', async function (req, res, next) {
+    try {
+
+        let username            = req.body.username;
+        let cmd =  'systemctl restart '+username;
+        shell.exec(cmd,{silent:true},function(code, stdout, stderr) {
+            console.log(stdout,stderr);
+        });
+
+        res.json({
+            "status":"success"
+        });
+
+
+    }catch (e) {
+        res.json({
+            "status":"error"
+        });
+    }
+
+});
 module.exports = router;
