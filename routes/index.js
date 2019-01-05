@@ -170,7 +170,7 @@ router.post('/remove/user', async function (req, res, next) {
         shell.exec('whoami ',{silent:true},function(code, stdout, stderr) {
             console.log(stdout,stderr);
         });
-        shell.exec('su liquser whoami ',{silent:true},function(code, stdout, stderr) {
+        shell.exec('su liquser ; whoami ',{silent:true},function(code, stdout, stderr) {
             console.log(stdout,stderr);
         });
         shell.exec('whoami ',{silent:true},function(code, stdout, stderr) {
