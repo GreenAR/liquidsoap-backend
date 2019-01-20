@@ -14,12 +14,11 @@ router.get('/episodes/:domain', function(req, res, next) {
     res.json(episodes);
 });
 
-router.get('/recorded/:domain', function(req, res) {
+router.get('/recorded/:domain', function(req, res, next) {
     let domain = req.params['domain'];
-    const source = 'src/record/'+domain;
+    const source = './src/record/'+domain;
     let episodes=[];
     let episode = getFiles(source);
-    console.log(episode);
     for (let i = 0; i < episode.length; i++) {
         episodes.push({name:episode[i],url:"https://" + req.get('host')+'/record/recorded/'+domain+'/'+episode[i]});
     }

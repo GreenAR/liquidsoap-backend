@@ -51,8 +51,8 @@ wsServer.on("request", function(req) {
             }
             ext = connection.hello.mime === "audio/mpeg" ? "mp3" : "raw";
             let filenamee= Date.now()+ "."+ ext;
-            mkdirp.sync("src/record/ifm.firstwebradio.com/15","777");
-            fd = fs.openSync("src/record/ifm.firstwebradio.com/15/" +filenamee , "w+");
+            mkdirp.sync("src/record/ifm.firstwebradio.com","777");
+            fd = fs.openSync("src/record/ifm.firstwebradio.com/" +filenamee , "w+");
             return;
         }
         switch (msg.type) {
