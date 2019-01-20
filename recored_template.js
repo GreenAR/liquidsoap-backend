@@ -53,7 +53,7 @@ wsServer.on("request", function(req) {
             let filenamee= Date.now()+ "."+ ext;
             let dirdir = "host_name";
             mkdirp.sync("src/record/"+dirdir,"777");
-            fd = fs.openSync("src/record"+dirdir+"/" + filenamee, "w");
+            fd = fs.openSync("src/record/"+dirdir+"/" + filenamee, "w");
             return;
         }
         switch (msg.type) {

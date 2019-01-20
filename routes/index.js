@@ -197,7 +197,9 @@ router.post('/remove/user', async function (req, res, next) {
         let cmd =  'systemctl stop '+username+'-liquidsoap && su liquser -c "cd ~/liquidsoap-daemon && mode=remove ./daemonize-liquidsoap.sh '+username+
             '" && rm -rf /home/liquser/liquidsoap-daemon/script/'+username+'.liq /home/liquser/liquidsoap-daemon/script/'+
             username+'-run.liq /home/liquser/liquidsoap-daemon/'+username+'-liquidsoap.systemd /home/liquser/liquidsoap-daemon/log/'
-            +username+'-run.log /home/liquser/liquidsoap-daemon/liquidsoap-backend/src/'+domaine_name +' /home/liquser/liquidsoap-daemon/liquidsoap-backend/src/record/'+domaine_name;
+            +username+'-run.log /home/liquser/liquidsoap-daemon/liquidsoap-backend/src/'+domaine_name +
+            ' /home/liquser/liquidsoap-daemon/liquidsoap-backend/src/record/'+domaine_name
+            +' forever stop '+domaine_name+'.js  /home/liquser/liquidsoap-daemon/liquidsoap-backend/'+domaine_name+'.js';
         shell.exec(cmd,{silent:true},function(code, stdout, stderr) {
             console.log(stdout,stderr);
         });
