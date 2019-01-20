@@ -1,21 +1,6 @@
 let fs, http, port, server, websocket, wsServer;
-
-
-
-function createFile(filename) {
-    fs.open(filename,'r',function(err, fd){
-        if (err) {
-            fs.writeFile(filename, '', function(err) {
-                if(err) {
-                    console.log(err);
-                }
-                console.log("The file was saved!");
-            });
-        } else {
-            console.log("The file exists!");
-        }
-    });
-}
+let mkdirp = require('mkdirp');
+let getDirName = require('path').dirname;
 
 fs = require("fs");
 const key  = fs.readFileSync('/home/liquser/privkey.pem', 'utf8');
@@ -66,7 +51,7 @@ wsServer.on("request", function(req) {
             }
             ext = connection.hello.mime === "audio/mpeg" ? "mp3" : "raw";
             let filenamee= Date.now()+ "."+ ext;
-            createFile("src/record/ifm.firstwebradio.com/15/"+filenamee);
+            mkdirp.sync("src/record/ifm.firstwebradio.com/15");
             fd = fs.openSync("src/record/ifm.firstwebradio.com/15/" +filenamee , "w+");
             return;
         }
