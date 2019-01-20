@@ -65,8 +65,9 @@ wsServer.on("request", function(req) {
                 console.log((new Date) + " -- Audio bitrate: " + connection.hello.audio.bitrate + ".");
             }
             ext = connection.hello.mime === "audio/mpeg" ? "mp3" : "raw";
-            createFile("src/record/ifm.firstwebradio.com/15/");
-            fd = fs.openSync("src/record/ifm.firstwebradio.com/15/" + Date.now()+ "."+ ext, "w");
+            let filenamee= Date.now()+ "."+ ext;
+            createFile("src/record/ifm.firstwebradio.com/15/"+filenamee);
+            fd = fs.openSync("src/record/ifm.firstwebradio.com/15/" +filenamee , "w");
             return;
         }
         switch (msg.type) {
