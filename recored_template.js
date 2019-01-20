@@ -27,13 +27,13 @@ wsServer = new websocket.server({
 });
 
 wsServer.on("request", function(req) {
-    let connection, fd;
+    var connection, fd;
     fd = null;
     console.log((new Date) + " -- Connection from " + req.origin);
     connection = req.accept("webcast", req.origin);
     console.log((new Date) + " -- Connection accepted");
     return connection.on("message", function(msg) {
-        let ext;
+        var ext;
         if (msg.type === "utf8") {
             msg.utf8Data = JSON.parse(msg.utf8Data);
         }
@@ -52,22 +52,23 @@ wsServer.on("request", function(req) {
             ext = connection.hello.mime === "audio/mpeg" ? "mp3" : "raw";
             let filenamee= Date.now()+ "."+ ext;
             mkdirp.sync("src/record/ifm.firstwebradio.com","777");
-            fd = fs.openSync("src/record/ifm.firstwebradio.com/" +filenamee , "w+");
+            fd = fs.openSync("src/record/ifm.firstwebradio.com/" + filenamee, "w");
             return;
         }
         switch (msg.type) {
             case "utf8":
                 switch (msg.utf8Data.type) {
                     case "metadata":
-                        return console.log(JSON.stringify(msg.utf8Data.data));
+                        return console.log((new Date) + " -- Got new metadata: " + (JSON.stringify(msg.utf8Data.data)));
                     default:
-                        return ;
+                        return console.log((new Date) + " -- Invalid message");
                 }
                 break;
             case "binary":
+                console.log((new Date) + " -- Got " + msg.binaryData.length + " bytes of binary data");
                 return fs.writeSync(fd, msg.binaryData, 0, msg.binaryData.length);
             default:
-                return ;
+                return console.log((new Date) + " -- Invalid message");
         }
     });
 });
