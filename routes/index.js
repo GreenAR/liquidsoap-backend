@@ -201,7 +201,10 @@ router.post('/remove/user', async function (req, res, next) {
             ' /home/liquser/liquidsoap-daemon/liquidsoap-backend/src/record/'+domaine_name
             +' forever stop '+domaine_name+'.js  /home/liquser/liquidsoap-daemon/liquidsoap-backend/'+domaine_name+'.js';
         shell.exec(cmd,{silent:true},function(code, stdout, stderr) {
-            console.log(stdout,stderr);
+            console.log(' forever stop '+domaine_name+'.js');
+            shell.exec('forever stop '+domaine_name+'.js',{silent:false},function(code, stdout, stderr) {
+                console.log(stdout,stderr);
+            });
         });
 
         res.json({
