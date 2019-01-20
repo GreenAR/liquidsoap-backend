@@ -9,7 +9,7 @@ http = require("https");
 
 websocket = require("websocket");
 
-port = 10004;
+port = harbor_record_port;
 
 server = http.createServer({key, cert},function(req, res) {
     console.log((new Date) + " -- Received request for " + req.url);
@@ -51,8 +51,9 @@ wsServer.on("request", function(req) {
             }
             ext = connection.hello.mime === "audio/mpeg" ? "mp3" : "raw";
             let filenamee= Date.now()+ "."+ ext;
-            mkdirp.sync("src/record/ifm.firstwebradio.com","777");
-            fd = fs.openSync("src/record/ifm.firstwebradio.com/" + filenamee, "w");
+            let dirdir = "host_name";
+            mkdirp.sync("src/record/"+dirdir,"777");
+            fd = fs.openSync("src/record"+dirdir+"/" + filenamee, "w");
             return;
         }
         switch (msg.type) {
