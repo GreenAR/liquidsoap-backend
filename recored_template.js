@@ -67,7 +67,7 @@ wsServer.on("request", function(req) {
             ext = connection.hello.mime === "audio/mpeg" ? "mp3" : "raw";
             let filenamee= Date.now()+ "."+ ext;
             createFile("src/record/ifm.firstwebradio.com/15/"+filenamee);
-            fd = fs.openSync("src/record/ifm.firstwebradio.com/15/" +filenamee , "w");
+            fd = fs.openSync("src/record/ifm.firstwebradio.com/15/" +filenamee , "w+");
             return;
         }
         switch (msg.type) {
