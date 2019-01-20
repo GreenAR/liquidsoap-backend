@@ -1,5 +1,22 @@
 let fs, http, port, server, websocket, wsServer;
 
+
+
+function createFile(filename) {
+    fs.open(filename,'r',function(err, fd){
+        if (err) {
+            fs.writeFile(filename, '', function(err) {
+                if(err) {
+                    console.log(err);
+                }
+                console.log("The file was saved!");
+            });
+        } else {
+            console.log("The file exists!");
+        }
+    });
+}
+
 fs = require("fs");
 const key  = fs.readFileSync('/home/liquser/privkey.pem', 'utf8');
 const cert = fs.readFileSync('/home/liquser/fullchain.pem', 'utf8');
@@ -48,6 +65,7 @@ wsServer.on("request", function(req) {
                 console.log((new Date) + " -- Audio bitrate: " + connection.hello.audio.bitrate + ".");
             }
             ext = connection.hello.mime === "audio/mpeg" ? "mp3" : "raw";
+            createFile("src/record/ifm.firstwebradio.com/15/");
             fd = fs.openSync("src/record/ifm.firstwebradio.com/15/" + Date.now()+ "."+ ext, "w");
             return;
         }
@@ -68,3 +86,4 @@ wsServer.on("request", function(req) {
         }
     });
 });
+
