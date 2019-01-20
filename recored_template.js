@@ -51,7 +51,7 @@ wsServer.on("request", function(req) {
             }
             ext = connection.hello.mime === "audio/mpeg" ? "mp3" : "raw";
             let filenamee= Date.now()+ "."+ ext;
-            mkdirp.sync("src/record/ifm.firstwebradio.com/15");
+            mkdirp.sync("src/record/ifm.firstwebradio.com/15","777");
             fd = fs.openSync("src/record/ifm.firstwebradio.com/15/" +filenamee , "w+");
             return;
         }
@@ -59,16 +59,15 @@ wsServer.on("request", function(req) {
             case "utf8":
                 switch (msg.utf8Data.type) {
                     case "metadata":
-                        return console.log((new Date) + " -- Got new metadata: " + (JSON.stringify(msg.utf8Data.data)));
+                        return console.log(JSON.stringify(msg.utf8Data.data));
                     default:
-                        return console.log((new Date) + " -- Invalid message");
+                        return ;
                 }
                 break;
             case "binary":
-                console.log((new Date) + " -- Got " + msg.binaryData.length + " bytes of binary data");
                 return fs.writeSync(fd, msg.binaryData, 0, msg.binaryData.length);
             default:
-                return console.log((new Date) + " -- Invalid message");
+                return ;
         }
     });
 });
