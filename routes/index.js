@@ -44,47 +44,37 @@ router.post('/start', function(req, res, next) {
         fs.writeFile('./../script/'+icecast_mount+'.liq', result, 'utf8', function (err) {
             if (err) return console.log(err);
             else {
-                shell.exec('./../shell '+icecast_mount,function(code, stdout, stderr) {
-                    res.json({
-                        'Exit code':code,
-                        'Program stdout':stdout,
-                        'Program stderr':stderr
+
+                fs.createReadStream('./recored_template.js').pipe(fs.createWriteStream('./'+host_name+'.js'));
+                // noinspection JSAnnotator
+                fs.chmod('./'+host_name+'.js', 0777 ,function (err,data) {
+                    if (err) {
+                        return console.log(err);
+                    }
+                });
+
+                fs.readFile('./'+host_name+'.js', 'utf8', function (err,data) {
+                    if (err) {
+                        return console.log(err);
+                    }
+                    var result = data.replace(/harbor_record_port/g,      harbor_port_record);
+                    result = result.replace  (/host_name/g,    host_name);
+
+                    fs.writeFile('./'+host_name+'.js', result, 'utf8', function (err) {
+                        if (err) return console.log(err);
+                        else {
+                            shell.exec('./../shell '+icecast_mount +" "+host_name,function(code, stdout, stderr) {
+                                res.json({
+                                    'Exit code':code,
+                                    'Program stdout':stdout,
+                                    'Program stderr':stderr
+                                });
+                            })
+                        }
+
                     });
-                })
-            }
+                });
 
-        });
-    });
-
-
-
-
-
-    fs.createReadStream('./recored_template.js').pipe(fs.createWriteStream('./'+host_name+'.js'));
-    // noinspection JSAnnotator
-    fs.chmod('./'+host_name+'.js', 0777 ,function (err,data) {
-        if (err) {
-            return console.log(err);
-        }
-    });
-
-    fs.readFile('./'+host_name+'.js', 'utf8', function (err,data) {
-        if (err) {
-            return console.log(err);
-        }
-        var result = data.replace(/harbor_record_port/g,      harbor_port_record);
-        result = result.replace  (/host_name/g,    host_name);
-
-        fs.writeFile('./'+host_name+'.js', result, 'utf8', function (err) {
-            if (err) return console.log(err);
-            else {
-                shell.exec('./../shell '+icecast_mount,function(code, stdout, stderr) {
-                    res.json({
-                        'Exit code':code,
-                        'Program stdout':stdout,
-                        'Program stderr':stderr
-                    });
-                })
             }
 
         });
