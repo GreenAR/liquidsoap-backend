@@ -64,8 +64,7 @@ router.delete('/episode/:id/:domain', function(req, res, next) {
     let domain = req.params['domain'];
     let id = req.params['id'];
     let source = 'src/'+domain;
-    let file=getFiles(source+'/'+id)[0];
-    source = 'src/'+domain+"/"+id+"/"+file;
+    source = 'src/'+domain+"/"+id
     console.log(source);
     fs.unlink(source, (err) => {
         res.status(200);
