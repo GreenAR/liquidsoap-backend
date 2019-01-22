@@ -1,7 +1,10 @@
 let express = require('express');
+
 let router = express.Router();
 let fs = require('fs');
 let path = require('path');
+var rimraf = require("rimraf");
+
 router.get('/episodes/:domain', function(req, res, next) {
     let domain = req.params['domain'];
     const source = './src/'+domain;
@@ -64,13 +67,13 @@ router.delete('/episode/:id/:domain', function(req, res, next) {
     let domain = req.params['domain'];
     let id = req.params['id'];
     let source = 'src/'+domain+"/"+id;
-    console.log(source);
-    fs.unlink(source, (err) => {
-        res.status(200);
-        res.end();
-        if (err)
-            next(err);
-    });
+try{
+    rimraf.sync(source);
+    res.status(200);
+    res.end();
+}catch (e) {
+    next()
+}
 });
 
 let getDirs = function(rootDir) {
