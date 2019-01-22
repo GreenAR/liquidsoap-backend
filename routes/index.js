@@ -220,6 +220,52 @@ router.post('/remove/user', async function (req, res, next) {
 
 });
 
+
+router.post('/disable/user', async function (req, res, next) {
+    try {
+
+        let username            = req.body.username;
+        let cmd =  'systemctl stop '+username+'-liquidsoap';
+        shell.exec(cmd,{silent:true},function(code, stdout, stderr) {
+            console.log(stdout,stderr);
+        });
+
+        res.json({
+            "status":"success"
+        });
+
+
+    }catch (e) {
+        res.json({
+            "status":"error"
+        });
+    }
+
+});
+router.post('/enable/user', async function (req, res, next) {
+    try {
+
+        let username            = req.body.username;
+        let cmd =  'systemctl start '+username+'-liquidsoap';
+        shell.exec(cmd,{silent:true},function(code, stdout, stderr) {
+            console.log(stdout,stderr);
+        });
+
+        res.json({
+            "status":"success"
+        });
+
+
+    }catch (e) {
+        res.json({
+            "status":"error"
+        });
+    }
+
+});
+
+
+
 router.post('/reload/server', async function (req, res, next) {
     try {
 
@@ -241,4 +287,6 @@ router.post('/reload/server', async function (req, res, next) {
     }
 
 });
+
+
 module.exports = router;

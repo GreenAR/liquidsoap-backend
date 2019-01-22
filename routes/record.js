@@ -25,6 +25,8 @@ router.get('/recorded/:domain', function(req, res, next) {
 		
    res.json(episodes);
 });
+
+
 router.get('/recorded/:domain/:file', function(req, res, next) {
 
     let domain = req.params['domain'];
@@ -34,7 +36,16 @@ router.get('/recorded/:domain/:file', function(req, res, next) {
     //res.sendFile( file,{ root: path.join(__dirname,"..",source,id) });
 });
 
+router.delete('/recorded/remove/:domain/:file', function(req, res, next) {
 
+    let domain = req.params['domain'];
+    let id = req.params['file'];
+    const source = 'src/record/'+domain+'/'+id;
+    fs.unlink(source, (err) => {
+        if (err) throw err;
+        res.json({msg:"record was deleted"});
+    });
+});
 
 
 
@@ -47,6 +58,7 @@ router.get('/episode/:id/:domain', function(req, res, next) {
     res.download( path.join(source,id,file),file);
     //res.sendFile( file,{ root: path.join(__dirname,"..",source,id) });
 });
+
 router.delete('/episode/:id/:domain', function(req, res, next) {
 
     let domain = req.params['domain'];
