@@ -3,8 +3,8 @@ let mkdirp = require('mkdirp');
 let getDirName = require('path').dirname;
 
 fs = require("fs");
-const key  = fs.readFileSync('/root/.acme.sh/*.firstwebradio.com/*.firstwebradio.com.key', 'utf8');
-const cert = fs.readFileSync('/root/.acme.sh/*.firstwebradio.com/*.firstwebradio.com.cer', 'utf8');
+const key  = fs.readFileSync('/home/liquser/privkey.pem', 'utf8');
+const cert = fs.readFileSync('/home/liquser/fullchain.pem', 'utf8');
 http = require("https");
 
 websocket = require("websocket");

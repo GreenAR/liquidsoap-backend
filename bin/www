@@ -9,8 +9,8 @@ var debug = require('debug')('liquidsoap-backend:server');
 var http = require('https');
 
 const fs = require('fs');
-const key  = fs.readFileSync('/root/.acme.sh/*.firstwebradio.com/*.firstwebradio.com.key', 'utf8');
-const cert = fs.readFileSync('/root/.acme.sh/*.firstwebradio.com/*.firstwebradio.com.cer', 'utf8');
+const key  = fs.readFileSync('/home/liquser/privkey.pem', 'utf8');
+const cert = fs.readFileSync('/home/liquser/fullchain.pem', 'utf8');
 
 
 /**
