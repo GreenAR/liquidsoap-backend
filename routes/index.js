@@ -169,10 +169,10 @@ router.post('/change/playlist', async function (req, res, next) {
         let playlist      = req.body.playlist;
         let telnet_port      = req.body.telnet_port;
         let cmd1 = telnet_port+' "default(dot)pls.uri '+playlist+'"';
-        let cmd2 = telnet_port+' '+mount+'.skip';
+        let cmd2 = 'python ./routes/telnet.py '+telnet_port+' '+mount+'.skip';
         shell.exec('python ./routes/telnet.py '+cmd1,{silent:true},function(code1, stdout1, stderr1) {
             setTimeout(function(){
-                shell.exec('python ./routes/telnet.py '+cmd2,{silent:true},function(code, stdout, stderr) {
+                shell.exec(cmd2,{silent:true},function(code, stdout, stderr) {
                     res.json({
                         "code1":code1,
                         "stdout1":stdout1,
@@ -180,6 +180,7 @@ router.post('/change/playlist', async function (req, res, next) {
                         "code":code,
                         "stdout":stdout,
                         "stderr":stderr,
+                        "cmd2":cmd2,
                     });
                 });
             }, 500);
