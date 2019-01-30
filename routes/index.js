@@ -174,7 +174,12 @@ router.post('/change/playlist', async function (req, res, next) {
             setTimeout(function(){
                 shell.exec('python ./routes/telnet.py '+cmd2,{silent:true},function(code, stdout, stderr) {
                     res.json({
-                        "status":"success"
+                        "code1":code1,
+                        "stdout1":stdout1,
+                        "stderr1":stderr1,
+                        "code":code,
+                        "stdout":stdout,
+                        "stderr":stderr,
                     });
                 });
             }, 500);
