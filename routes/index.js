@@ -183,7 +183,7 @@ router.post('/change/playlist', async function (req, res, next) {
                         "cmd2":cmd2,
                     });
                 });
-            }, 500);
+            }, 1500);
 
         });
     }catch (e) {
